@@ -2,33 +2,12 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!-- End Required meta tags -->
-  <title>Hook Exchange Dapp</title>
-  <!-- FAVICONS -->
-  <link rel="apple-touch-icon" sizes="144x144" href="assets/apple-touch-icon.png">
-  <link rel="shortcut icon" href="assets/favicon.ico">
-  <meta name="theme-color" content="#3063A0"><!-- End FAVICONS -->
-
-  <link rel="stylesheet" href="assets/stylesheets/custom-fonts.css">
-  <link rel="stylesheet" href="assets/vendor/open-iconic/font/css/open-iconic-bootstrap.min.css">
-  <link rel="stylesheet" href="assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="assets/vendor/flatpickr/flatpickr.min.css"><!-- END PLUGINS STYLES -->
-  <!-- BEGIN THEME STYLES -->
-  <link rel="stylesheet" href="assets/stylesheets/theme.min.css" data-skin="default">
-  <link rel="stylesheet" href="assets/stylesheets/theme-dark.min.css" data-skin="dark">
-  <link rel="stylesheet" href="assets/stylesheets/custom.css">
+  <!--#include file="inc_header.html"-->
   <script>
-    var skin = 'dark'; // localStorage.getItem('skin') || 'default';
-    var isCompact = JSON.parse(localStorage.getItem('hasCompactMenu'));
-    var disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
-    // Disable unused skin immediately
-    disabledSkinStylesheet.setAttribute('rel', '');
-    disabledSkinStylesheet.setAttribute('disabled', true);
-    // add flag class to html immediately
-    if (isCompact == true) document.querySelector('html').classList.add('preparing-compact-menu');
-  </script><!-- END THEME STYLES -->
+    $(function () {
+      console.log('init dapp ok.');
+    });
+  </script>
 </head>
 
 <body>
@@ -340,7 +319,7 @@
                     </div><!-- /.card -->
                   </div><!-- /grid column -->
                   <!-- grid column -->
-                  <div class="col-12 col-lg-6 col-xl-4">
+                  <div class="col-12 col-lg-6 col-xl-6">
                     <!-- .card -->
                     <div class="card card-fluid">
                       <!-- .card-body -->
@@ -349,67 +328,58 @@
                         <form>
                           <!-- .fieldset -->
                           <fieldset>
-                            <div class="row">
-                              <div class="col-6">
-                                <label for="tf1">Select Chains:</label>
-                                <select class="custom-select" id="addLiqChain" required="">
-                                  <option value="">Choose Chain ...</option>
-                                  <option value="ETH_MAINNET">ETH</option>
-                                  <option value="BSC_MAINNET">BSC</option>
-                                  <option value="HECO_MAINNET">Heco</option>
-                                  <option value="OKCHAIN_MAINNET">OKChain</option>
-                                </select>
-                                <div class="text-center mt-3 mb-2"><i class="oi oi-arrow-thick-bottom"></i></div>
-                              </div>
-                              <div class="col-6">
-                                <label for="tf1">Select Stable Coin:</label>
+                            <div class="row mb-4">
+                              <div class="col-5">
                                 <select class="custom-select" id="addLiqStableCoin" required="">
-                                  <option value="">Choose Stable Coin ...</option>
+                                  <option value="">Swap Stable Coin ...</option>
                                   <option value="USDT">USDT (Tether USD)</option>
                                   <option value="USDC">USDC (USD Coin)</option>
                                   <option value="GUSD">GUSD (Gemini dollar)</option>
                                   <option value="DAI">DAI (Dai Stablecoin)</option>
                                 </select>
-                                <div class="text-center mt-3 mb-2"><i class="oi oi-arrow-thick-bottom"></i></div>
+                              </div>
+                              <div class="col-2">
+                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
+                              </div>
+                              <div class="col-5">
+                                <select class="custom-select" id="addLiqStableCoin" required="">
+                                  <option value="">To Stable Coin ...</option>
+                                  <option value="USDT">USDT (Tether USD)</option>
+                                  <option value="USDC">USDC (USD Coin)</option>
+                                  <option value="GUSD">GUSD (Gemini dollar)</option>
+                                  <option value="DAI">DAI (Dai Stablecoin)</option>
+                                </select>
                               </div>
                             </div>
-                            <div class="row">
-                              <div class="col-6">
+                            <div class="row mb-4">
+                              <div class="col-5">
                                 <select class="custom-select" id="addLiqChain" required="">
-                                  <option value="">Choose Chain ...</option>
+                                  <option value="">Source Chain ...</option>
                                   <option value="ETH_MAINNET">ETH</option>
                                   <option value="BSC_MAINNET">BSC</option>
                                   <option value="HECO_MAINNET">Heco</option>
                                   <option value="OKCHAIN_MAINNET">OKChain</option>
                                 </select>
                               </div>
-                              <div class="col-6">
-                                <select class="custom-select" id="addLiqStableCoin" required="">
-                                  <option value="">Choose Stable Coin ...</option>
-                                  <option value="USDT">USDT (Tether USD)</option>
-                                  <option value="USDC">USDC (USD Coin)</option>
-                                  <option value="GUSD">GUSD (Gemini dollar)</option>
-                                  <option value="DAI">DAI (Dai Stablecoin)</option>
+                              <div class="col-2">
+                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
+                              </div>
+                              <div class="col-5">
+                                <select class="custom-select" id="addLiqChain" required="">
+                                  <option value="">Target Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
                                 </select>
                               </div>
                             </div>
                             <!-- .form-group -->
                             <div class="form-group">
-                              <label for="tf1">Select Stable Coin:</label>
-                              <select class="custom-select" id="addLiqStableCoin" required="">
-                                <option value="">Choose Stable Coin ...</option>
-                                <option value="USDT">USDT (Tether USD)</option>
-                                <option value="USDC">USDC (USD Coin)</option>
-                                <option value="GUSD">GUSD (Gemini dollar)</option>
-                                <option value="DAI">DAI (Dai Stablecoin)</option>
-                              </select>
-                              <small id="tf1Help" class="form-text text-muted">You have 23.45K USDT.</small>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
                               <label for="tf2">Amount to Swap:</label>
                               <div class="custom-number">
                                 <input type="number" class="form-control" id="addLiqAmount" min="0" max="10" step="1"
-                                  value="0" placeholder="Amount to add liquidity">
+                                  value="0" placeholder="Amount to swap">
                                 <div class="custom-number-controls">
                                   <div class="custom-number-btn custom-number-up">+</div>
                                   <div class="custom-number-btn custom-number-down">-</div>
@@ -418,6 +388,16 @@
                               <small id="tf1Help" class="form-text text-muted">Set max amount <a href="#0">21.3
                                   K</a>.</small>
                             </div><!-- /.form-group -->
+                            <div class="form-group">
+                              <label>Receiver Address</label>
+                              <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="swapStableReceiver" checked>
+                                <label class="custom-control-label" for="swapStableReceiver">Same As Sender
+                                  Address</label>
+                              </div>
+                              <input type="text" class="form-control" value="0xA31ed864FeACd91CB7322Ea42BCF94b07Ae0d0d3"
+                                disabled placeholder="Amount to swap">
+                            </div>
                             <div class="form-group">
                               <label for="tf1">Select Stable Coin:</label>
                               <select class="custom-select" id="addLiqStableCoin" required="">
@@ -432,8 +412,8 @@
                             <!-- .form-group -->
                             <div class="form-group">
                               <button class="btn btn-primary btn-lg btn-block" type="button">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Approve and Add Liquidity
+                                <span class="spinner-border spinner-border-sm" role="status"></span>
+                                Approve and Swap
                               </button>
                             </div><!-- /.form-group -->
                           </fieldset><!-- /.fieldset -->
@@ -566,39 +546,11 @@
           </div><!-- /.page-inner -->
         </div><!-- /.page -->
       </div><!-- /.wrapper -->
-      <!-- .app-footer -->
-      <footer class="app-footer">
-        <ul class="list-inline">
-          <li class="list-inline-item">
-            <a class="text-muted" href="#">Support</a>
-          </li>
-          <li class="list-inline-item">
-            <a class="text-muted" href="#">Help Center</a>
-          </li>
-          <li class="list-inline-item">
-            <a class="text-muted" href="#">Privacy</a>
-          </li>
-          <li class="list-inline-item">
-            <a class="text-muted" href="#">Terms of Service</a>
-          </li>
-        </ul>
-        <div class="copyright"> Copyright © 2021. All right reserved. </div>
-      </footer><!-- /.app-footer -->
+
+      <!--#include file="inc_footer.html"-->
+
     </main><!-- /.app-main -->
   </div><!-- /.app -->
-  <!-- BEGIN BASE JS -->
-  <script src="assets/vendor/jquery/jquery.min.js"></script>
-  <script src="assets/vendor/popper.js/umd/popper.min.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script> <!-- END BASE JS -->
-  <!-- BEGIN PLUGINS JS -->
-  <script src="assets/vendor/pace-progress/pace.min.js"></script>
-  <script src="assets/vendor/stacked-menu/js/stacked-menu.min.js"></script>
-  <script src="assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-  <script src="assets/vendor/flatpickr/flatpickr.min.js"></script>
-  <script src="assets/vendor/easy-pie-chart/jquery.easypiechart.min.js"></script>
-  <script src="assets/vendor/chart.js/Chart.min.js"></script> <!-- END PLUGINS JS -->
-  <!-- BEGIN THEME JS -->
-  <script src="assets/javascript/theme.min.js"></script> <!-- END THEME JS -->
 </body>
 
 </html>
