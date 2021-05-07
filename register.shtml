@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!-- End Required meta tags -->
+  <title>Hook Exchange Dapp</title>
+  <!-- FAVICONS -->
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/apple-touch-icon.png">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <meta name="theme-color" content="#3063A0"><!-- End FAVICONS -->
+
+  <link rel="stylesheet" href="assets/stylesheets/custom-fonts.css">
+  <link rel="stylesheet" href="assets/vendor/open-iconic/font/css/open-iconic-bootstrap.min.css">
+  <link rel="stylesheet" href="assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="assets/vendor/flatpickr/flatpickr.min.css"><!-- END PLUGINS STYLES -->
+  <!-- BEGIN THEME STYLES -->
+  <link rel="stylesheet" href="assets/stylesheets/theme.min.css" data-skin="default">
+  <link rel="stylesheet" href="assets/stylesheets/theme-dark.min.css" data-skin="dark">
+  <link rel="stylesheet" href="assets/stylesheets/custom.css">
+  <script>
+    var skin = 'dark'; // localStorage.getItem('skin') || 'default';
+    var isCompact = JSON.parse(localStorage.getItem('hasCompactMenu'));
+    var disabledSkinStylesheet = document.querySelector('link[data-skin]:not([data-skin="' + skin + '"])');
+    // Disable unused skin immediately
+    disabledSkinStylesheet.setAttribute('rel', '');
+    disabledSkinStylesheet.setAttribute('disabled', true);
+    // add flag class to html immediately
+    if (isCompact == true) document.querySelector('html').classList.add('preparing-compact-menu');
+  </script><!-- END THEME STYLES -->
+</head>
+
+<body>
+  <!-- .app -->
+  <div class="app has-fullwidth">
+    <!--[if lt IE 10]>
+      <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
+      <![endif]-->
+    <!-- .app-header -->
+    <header class="app-header app-header-dark">
+      <!-- .navbar -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary-disabled py-lg-0" style="background-color: #222230;">
+        <!-- .container -->
+        <div class="container">
+          <!-- .navbar-brand -->
+          <a class="navbar-brand" href="/">
+            <img style="height:28px" src="assets/images/logo/logo.svg">
+          </a> <!-- /.navbar-brand -->
+          <button class="hamburger hamburger-squeeze d-flex d-lg-none" type="button" data-toggle="collapse"
+            data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false"
+            aria-label="Toggle navigation"><span class="hamburger-box"><span
+                class="hamburger-inner"></span></span></button> <!-- .navbar-collapse -->
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <!-- .navbar-nav -->
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#stable">Swap Stable Coins</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="#erc">Swap ERC Tokens</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#staking">Staking and Earn</a>
+              </li>
+            </ul><!-- /.navbar-nav -->
+            <!-- .btn-account -->
+            <div class="navbar-nav dropdown d-flex mr-lg-n3">
+              <button class="btn-account w-100" type="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false"><span class="user-avatar user-avatar-md mr-lg-0"><img
+                    src="assets/images/crypto/ETH.svg" alt=""></span>
+                <span class="account-summary pl-2">
+                  <span class="account-name">Ethereum Mainnet</span>
+                  <span class="account-description">0x35F1f0...9c8E09</span>
+                </span>
+              </button> <!-- .dropdown-menu -->
+              <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-arrow mr-3"></div>
+                <h6 class="dropdown-header d-none d-lg-block d-lg-none">Ethereum Mainnet</h6><a class="dropdown-item"
+                  href="user-profile.html"><span class="dropdown-icon oi oi-person"></span> Profile</a> <a
+                  class="dropdown-item" href="auth-signin-v1.html"><span
+                    class="dropdown-icon oi oi-account-logout"></span> Logout</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Help Center</a> <a
+                  class="dropdown-item" href="#">Ask Forum</a> <a class="dropdown-item" href="#">Keyboard Shortcuts</a>
+              </div><!-- /.dropdown-menu -->
+            </div><!-- /.btn-account -->
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container -->
+      </nav><!-- /.navbar -->
+    </header><!-- /.app-header -->
+    <!-- /.app-header -->
+    <!-- .app-main -->
+    <main class="app-main">
+      <!-- .wrapper -->
+      <div class="wrapper">
+        <!-- .page -->
+        <div class="page">
+          <!-- .page-inner -->
+          <div class="page-inner">
+            <!-- .container -->
+            <div class="container">
+              <!-- .page-title-bar -->
+              <header class="page-title-bar">
+                <div class="d-flex flex-column flex-md-row">
+                  <p class="lead">
+                    <span class="font-weight-bold">Register Your ERC Token for Cross Chain</span>
+                    <span class="d-block text-muted">Any ERC Token can be registered by its owner.</span>
+                    <span class="d-block text-muted">Please read the <a target="_blank" href="#0">registration guide</a>
+                      before register
+                      tokens for cross
+                      chain.</span>
+                  </p>
+                  <div class="ml-auto">
+                  </div>
+                </div>
+              </header><!-- /.page-title-bar -->
+              <!-- .page-section -->
+              <div class="page-section">
+                <!-- grid row -->
+                <div class="row">
+                  <!-- grid column -->
+                  <div class="col-12">
+                    <!-- .card -->
+                    <div class="card card-fluid">
+                      <!-- .card-body -->
+                      <div class="card-body">
+                        <h3 class="card-title mb-4">Register ERC Token</h3>
+                        <form>
+                          <!-- .fieldset -->
+                          <fieldset>
+                            <div class="row">
+                              <div class="col-12">
+                                <label for="tf2">Source and target chain:</label>
+                              </div>
+                            </div>
+                            <div class="row mb-4">
+                              <div class="col-5">
+                                <select class="custom-select" id="sourceChain" required="">
+                                  <option value="">From Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
+                                </select>
+                                <small class="form-text text-muted">Please collect your wallet to the selected
+                                  chain.</small>
+                              </div>
+                              <div class="col-2">
+                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
+                              </div>
+                              <div class="col-5">
+                                <select class="custom-select" id="targetChain" required="">
+                                  <option value="">To Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <label>Source and target token address:</label>
+                              </div>
+                            </div>
+                            <div class="row mb-4">
+                              <div class="col-5">
+                                <input type="text" class="form-control" id="sourceToken" value="0x"
+                                  placeholder="Token Address">
+                                <small class="form-text text-muted">You must be deployer or owner of this
+                                  token.</small>
+                              </div>
+                              <div class="col-2">
+                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
+                              </div>
+                              <div class="col-5">
+                                <input type="text" class="form-control" id="targetToken" value="0x"
+                                  placeholder="Token Address">
+                                <small class="form-text text-muted">Token decimals must be same as source token.</small>
+                              </div>
+                            </div>
+                            <!-- .form-group -->
+                            <div class="form-group">
+                              <button class="btn btn-primary btn-lg btn-block" type="button">
+                                <span class="spinner-border spinner-border-sm" role="status"></span>
+                                Register Tokens for Cross Chain
+                              </button>
+                            </div><!-- /.form-group -->
+                          </fieldset><!-- /.fieldset -->
+                        </form>
+                      </div><!-- /.card-body -->
+                    </div><!-- /.card -->
+                  </div><!-- /grid column -->
+                </div><!-- /grid row -->
+              </div><!-- /.page-section -->
+            </div><!-- /.container -->
+          </div><!-- /.page-inner -->
+        </div><!-- /.page -->
+      </div><!-- /.wrapper -->
+      <!--#include file="inc_footer.html"-->
+    </main><!-- /.app-main -->
+  </div><!-- /.app -->
+  <!-- BEGIN BASE JS -->
+  <script src="assets/vendor/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/popper.js/umd/popper.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script> <!-- END BASE JS -->
+  <!-- BEGIN PLUGINS JS -->
+  <script src="assets/vendor/pace-progress/pace.min.js"></script>
+  <script src="assets/vendor/stacked-menu/js/stacked-menu.min.js"></script>
+  <script src="assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+  <script src="assets/vendor/flatpickr/flatpickr.min.js"></script>
+  <script src="assets/vendor/easy-pie-chart/jquery.easypiechart.min.js"></script>
+  <script src="assets/vendor/chart.js/Chart.min.js"></script> <!-- END PLUGINS JS -->
+  <!-- BEGIN THEME JS -->
+  <script src="assets/javascript/theme.min.js"></script> <!-- END THEME JS -->
+</body>
+
+</html>
