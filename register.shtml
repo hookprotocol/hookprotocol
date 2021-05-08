@@ -158,6 +158,19 @@
                                 <small class="form-text text-muted">Token decimals must be same as source token.</small>
                               </div>
                             </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <label>Source token deployer transaction hash:</label>
+                              </div>
+                            </div>
+                            <div class="row mb-4">
+                              <div class="col-5">
+                                <input type="text" class="form-control" id="sourceToken" value=""
+                                  placeholder="Transaction Hash">
+                                <small class="form-text text-muted">The deployer transaction can help verify your token
+                                  faster. Leave it empty if you are not sure the transaction hash.</small>
+                              </div>
+                            </div>
                             <!-- .form-group -->
                             <div class="form-group">
                               <button class="btn btn-primary btn-lg btn-block" type="button">
