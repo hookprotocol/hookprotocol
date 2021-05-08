@@ -109,11 +109,11 @@
                           <fieldset>
                             <div class="row">
                               <div class="col-12">
-                                <label for="tf2">Source and target chain:</label>
+                                <label for="tf2">Source chain and source token address:</label>
                               </div>
                             </div>
                             <div class="row mb-4">
-                              <div class="col-5">
+                              <div class="col-6">
                                 <select class="custom-select" id="sourceChain" required="">
                                   <option value="">From Chain ...</option>
                                   <option value="ETH_MAINNET">ETH</option>
@@ -124,38 +124,11 @@
                                 <small class="form-text text-muted">Please collect your wallet to the selected
                                   chain.</small>
                               </div>
-                              <div class="col-2">
-                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
-                              </div>
-                              <div class="col-5">
-                                <select class="custom-select" id="targetChain" required="">
-                                  <option value="">To Chain ...</option>
-                                  <option value="ETH_MAINNET">ETH</option>
-                                  <option value="BSC_MAINNET">BSC</option>
-                                  <option value="HECO_MAINNET">Heco</option>
-                                  <option value="OKCHAIN_MAINNET">OKChain</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-12">
-                                <label>Source and target token address:</label>
-                              </div>
-                            </div>
-                            <div class="row mb-4">
-                              <div class="col-5">
+                              <div class="col-6">
                                 <input type="text" class="form-control" id="sourceToken" value="0x"
                                   placeholder="Token Address">
                                 <small class="form-text text-muted">You must be deployer or owner of this
                                   token.</small>
-                              </div>
-                              <div class="col-2">
-                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
-                              </div>
-                              <div class="col-5">
-                                <input type="text" class="form-control" id="targetToken" value="0x"
-                                  placeholder="Token Address">
-                                <small class="form-text text-muted">Token decimals must be same as source token.</small>
                               </div>
                             </div>
                             <div class="row">
@@ -164,11 +137,69 @@
                               </div>
                             </div>
                             <div class="row mb-4">
-                              <div class="col-5">
+                              <div class="col-6">
                                 <input type="text" class="form-control" id="sourceToken" value=""
                                   placeholder="Transaction Hash">
                                 <small class="form-text text-muted">The deployer transaction can help verify your token
-                                  faster. Leave it empty if you are not sure the transaction hash.</small>
+                                  much faster. Leave it empty if you are not sure the transaction hash.</small>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <label>Target chain and target token address:</label>
+                              </div>
+                            </div>
+                            <div class="row mb-4">
+                              <div class="col-6">
+                                <select class="custom-select" required="">
+                                  <option value="">To Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
+                                </select>
+                              </div>
+                              <div class="col-6">
+                                <input type="text" class="form-control" id="targetToken" value="0x"
+                                  placeholder="Token Address">
+                              </div>
+                            </div>
+                            <div class="row mb-4">
+                              <div class="col-6">
+                                <select class="custom-select" required="">
+                                  <option value="">To Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
+                                </select>
+                              </div>
+                              <div class="col-6">
+                                <input type="text" class="form-control" id="targetToken" value="0x"
+                                  placeholder="Token Address">
+                              </div>
+                            </div>
+                            <div class="row mb-4">
+                              <div class="col-6">
+                                <select class="custom-select" required="">
+                                  <option value="">To Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
+                                </select>
+                                <small class="form-text text-muted">Target chain must be different to source
+                                  chain.</small>
+                              </div>
+                              <div class="col-6">
+                                <input type="text" class="form-control" id="targetToken" value="0x"
+                                  placeholder="Token Address">
+                                <small class="form-text text-muted">Token decimals must be same as source token.</small>
+                              </div>
+                            </div>
+                            <div class="row mb-4" style="display: none;">
+                              <div class="col-12">
+                                <a href="#0"><i class="oi oi-plus"></i> Add More Cross Chain</a>
                               </div>
                             </div>
                             <!-- .form-group -->

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!--#include file="inc_header.html"-->
+  <script>
+    $(function () {
+      console.log('init dapp ok.');
+    });
+  </script>
+</head>
+
+<body>
+  <!-- .app -->
+  <div id="app" class="app has-fullwidth">
+    <!--[if lt IE 10]>
+      <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
+      <![endif]-->
+    <!-- .app-header -->
+    <header class="app-header app-header-dark">
+      <!-- .navbar -->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary-disabled py-lg-0" style="background-color: #222230;">
+        <!-- .container -->
+        <div class="container">
+          <!-- .navbar-brand -->
+          <a class="navbar-brand" href="/">
+            <img style="height:28px" src="assets/images/logo/logo.svg">
+          </a> <!-- /.navbar-brand -->
+          <button class="hamburger hamburger-squeeze d-flex d-lg-none" type="button" data-toggle="collapse"
+            data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false"
+            aria-label="Toggle navigation"><span class="hamburger-box"><span
+                class="hamburger-inner"></span></span></button> <!-- .navbar-collapse -->
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <!-- .navbar-nav -->
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="#stable">Swap Stable Coins</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#erc">Swap ERC Tokens</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#staking">Staking and Earn</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="#top">Docs</a>
+              </li>
+            </ul><!-- /.navbar-nav -->
+            <!-- .btn-account -->
+            <div class="navbar-nav dropdown d-flex mr-lg-n3">
+              <button class="btn-account w-100" type="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false"><span class="user-avatar user-avatar-md mr-lg-0"><img
+                    src="assets/images/crypto/ETH.svg" alt=""></span>
+                <span class="account-summary pl-2">
+                  <span class="account-name">Ethereum Mainnet</span>
+                  <span class="account-description">0x35F1f0...9c8E09</span>
+                </span>
+              </button> <!-- .dropdown-menu -->
+              <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-arrow mr-3"></div>
+                <h6 class="dropdown-header d-none d-lg-block d-lg-none">Ethereum Mainnet</h6><a class="dropdown-item"
+                  href="user-profile.html"><span class="dropdown-icon oi oi-person"></span> Profile</a> <a
+                  class="dropdown-item" href="auth-signin-v1.html"><span
+                    class="dropdown-icon oi oi-account-logout"></span> Logout</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Help Center</a> <a
+                  class="dropdown-item" href="#">Ask Forum</a> <a class="dropdown-item" href="#">Keyboard Shortcuts</a>
+              </div><!-- /.dropdown-menu -->
+            </div><!-- /.btn-account -->
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container -->
+      </nav><!-- /.navbar -->
+    </header><!-- /.app-header -->
+    <!-- /.app-header -->
+    <!-- .app-main -->
+    <main class="app-main">
+      <!-- .wrapper -->
+      <div class="wrapper">
+        <!-- .page -->
+        <div class="page">
+          <!-- .page-inner -->
+          <div class="page-inner">
+            <!-- .container -->
+            <div class="container">
+              <!-- .page-title-bar -->
+              <header class="page-title-bar">
+                <div class="d-flex flex-column flex-md-row">
+                  <p class="lead">
+                    <span class="font-weight-bold">Documenation: Hook Exchange for Cross Chain</span> <span
+                      class="d-block text-muted">The detail of hook protocol for cross chain.</span>
+                  </p>
+                  <div class="ml-auto"> 
+                  </div>
+                </div>
+              </header><!-- /.page-title-bar -->
+              <!-- .page-section -->
+              <div class="page-section"> 
+                <!-- grid row -->
+                <div class="row">
+                  <!-- grid column -->
+                  <div class="col-12 col-md-4 col-lg-3">
+                    <!-- .card -->
+                    <div class="card card-fluid">
+                      <!-- .card-body -->
+                      <div class="card-body pb-0">
+                        <h3 class="card-title">Index</h3>
+                        <div class="ml-0 mb-2 text-bold">Swap ERC Tokens</div>
+                        <div class="ml-4 mb-2">Swap ERC Tokens</div>
+                        <div class="ml-4 mb-2">Swap ERC Tokens</div>
+                        <div class="ml-4 mb-2">Swap ERC Tokens</div>
+                        <!-- .list-group -->
+                        <div class="list-group list-group-flush">    
+                        </div><!-- /.list-group -->
+                        <p>My Liquidity</p>
+                      </div><!-- /.card-body -->
+                    </div><!-- /.card -->
+                  </div><!-- /grid column -->
+                  <!-- grid column -->
+                  <div class="col-12 col-lg-12 col-xl-4">
+                    <!-- .card -->
+                    <div class="card card-fluid">
+                      <!-- .card-body -->
+                      <div class="card-body">
+                        <h3 class="card-title mb-4">Add Liquidity</h3>
+                        <form>
+                          <!-- .fieldset -->
+                          <fieldset>
+                            <div class="form-group">
+                              <label for="tf1">Select Chain:</label>
+                              <select class="custom-select" id="addLiqChain" required="">
+                                <option value="">Choose Chain ...</option>
+                                <option value="ETH_MAINNET">ETH</option>
+                                <option value="BSC_MAINNET">BSC</option>
+                                <option value="HECO_MAINNET">Heco</option>
+                                <option value="OKCHAIN_MAINNET">OKChain</option>
+                              </select>
+                              <small id="tf1Help" class="form-text text-muted">You must have stable coin on your
+                                selected chain in order to add liquidity.</small>
+                            </div><!-- /.form-group -->
+                            <!-- .form-group -->
+                            <div class="form-group">
+                              <label for="tf1">Select Stable Coin:</label>
+                              <select class="custom-select" id="addLiqStableCoin" required="">
+                                <option value="">Choose Stable Coin ...</option>
+                                <option value="USDT">USDT (Tether USD)</option>
+                                <option value="USDC">USDC (USD Coin)</option>
+                                <option value="GUSD">GUSD (Gemini dollar)</option>
+                                <option value="DAI">DAI (Dai Stablecoin)</option>
+                              </select>
+                              <small id="tf1Help" class="form-text text-muted">You have 23.45K USDT.</small>
+                            </div>
+                            <div class="form-group">
+                              <label for="tf2">Amount to Add:</label>
+                              <div class="custom-number">
+                                <input type="number" class="form-control" id="addLiqAmount" min="0" max="10" step="1"
+                                  value="0" placeholder="Amount to add liquidity">
+                                <div class="custom-number-controls">
+                                  <div class="custom-number-btn custom-number-up">+</div>
+                                  <div class="custom-number-btn custom-number-down">-</div>
+                                </div>
+                              </div>
+                              <small id="tf1Help" class="form-text text-muted">Set max amount <a href="#0">21.3
+                                  K</a>.</small>
+                            </div><!-- /.form-group -->
+                            <!-- .form-group -->
+                            <div class="form-group">
+                              <button class="btn btn-primary btn-lg btn-block" type="button">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Approve and Add Liquidity
+                              </button>
+                            </div><!-- /.form-group -->
+                          </fieldset><!-- /.fieldset -->
+                        </form>
+                      </div><!-- /.card-body -->
+                    </div><!-- /.card -->
+                  </div><!-- /grid column -->
+                  <!-- grid column -->
+                  <div class="col-12 col-lg-6 col-xl-6">
+                    <!-- .card -->
+                    <div class="card card-fluid">
+                      <!-- .card-body -->
+                      <div class="card-body">
+                        <h3 class="card-title mb-4">Swap Stable Coin</h3>
+                        <form>
+                          <!-- .fieldset -->
+                          <fieldset>
+                            <div class="row mb-4">
+                              <div class="col-5">
+                                <select class="custom-select" id="addLiqStableCoin" required="">
+                                  <option value="">Swap Stable Coin ...</option>
+                                  <option value="USDT">USDT (Tether USD)</option>
+                                  <option value="USDC">USDC (USD Coin)</option>
+                                  <option value="GUSD">GUSD (Gemini dollar)</option>
+                                  <option value="DAI">DAI (Dai Stablecoin)</option>
+                                </select>
+                              </div>
+                              <div class="col-2">
+                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
+                              </div>
+                              <div class="col-5">
+                                <select class="custom-select" id="addLiqStableCoin" required="">
+                                  <option value="">To Stable Coin ...</option>
+                                  <option value="USDT">USDT (Tether USD)</option>
+                                  <option value="USDC">USDC (USD Coin)</option>
+                                  <option value="GUSD">GUSD (Gemini dollar)</option>
+                                  <option value="DAI">DAI (Dai Stablecoin)</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="row mb-4">
+                              <div class="col-5">
+                                <select class="custom-select" id="addLiqChain" required="">
+                                  <option value="">Source Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
+                                </select>
+                              </div>
+                              <div class="col-2">
+                                <div class="text-center mt-2"><i class="oi oi-arrow-thick-right"></i></div>
+                              </div>
+                              <div class="col-5">
+                                <select class="custom-select" id="addLiqChain" required="">
+                                  <option value="">Target Chain ...</option>
+                                  <option value="ETH_MAINNET">ETH</option>
+                                  <option value="BSC_MAINNET">BSC</option>
+                                  <option value="HECO_MAINNET">Heco</option>
+                                  <option value="OKCHAIN_MAINNET">OKChain</option>
+                                </select>
+                              </div>
+                            </div>
+                            <!-- .form-group -->
+                            <div class="form-group">
+                              <label for="tf2">Amount to Swap:</label>
+                              <div class="custom-number">
+                                <input type="number" class="form-control" id="addLiqAmount" min="0" max="10" step="1"
+                                  value="0" placeholder="Amount to swap">
+                                <div class="custom-number-controls">
+                                  <div class="custom-number-btn custom-number-up">+</div>
+                                  <div class="custom-number-btn custom-number-down">-</div>
+                                </div>
+                              </div>
+                              <small id="tf1Help" class="form-text text-muted">Set max amount <a href="#0">21.3
+                                  K</a>.</small>
+                            </div><!-- /.form-group -->
+                            <div class="form-group">
+                              <label>Receiver Address</label>
+                              <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="swapStableReceiver" checked>
+                                <label class="custom-control-label" for="swapStableReceiver">Same As Sender
+                                  Address</label>
+                              </div>
+                              <input type="text" class="form-control" value="0xA31ed864FeACd91CB7322Ea42BCF94b07Ae0d0d3"
+                                disabled placeholder="Amount to swap">
+                            </div>
+                            <div class="form-group">
+                              <label for="tf1">Select Stable Coin:</label>
+                              <select class="custom-select" id="addLiqStableCoin" required="">
+                                <option value="">Choose Stable Coin ...</option>
+                                <option value="USDT">USDT (Tether USD)</option>
+                                <option value="USDC">USDC (USD Coin)</option>
+                                <option value="GUSD">GUSD (Gemini dollar)</option>
+                                <option value="DAI">DAI (Dai Stablecoin)</option>
+                              </select>
+                              <small id="tf1Help" class="form-text text-muted">You have 23.45K USDT.</small>
+                            </div><!-- /.form-group -->
+                            <!-- .form-group -->
+                            <div class="form-group">
+                              <button class="btn btn-primary btn-lg btn-block" type="button">
+                                <span class="spinner-border spinner-border-sm" role="status"></span>
+                                Approve and Swap
+                              </button>
+                            </div><!-- /.form-group -->
+                          </fieldset><!-- /.fieldset -->
+                        </form>
+                      </div><!-- /.card-body -->
+                      <!-- .card-footer -->
+                      <div class="card-footer">
+                        <div class="card-footer-item">
+                          <i class="fa fa-fw fa-circle text-indigo"></i> 100% <div class="text-muted small"> Assigned
+                          </div>
+                        </div>
+                        <div class="card-footer-item">
+                          <i class="fa fa-fw fa-circle text-purple"></i> 75% <div class="text-muted small"> Completed
+                          </div>
+                        </div>
+                        <div class="card-footer-item">
+                          <i class="fa fa-fw fa-circle text-teal"></i> 60% <div class="text-muted small"> Active </div>
+                        </div>
+                      </div><!-- /.card-footer -->
+                    </div><!-- /.card -->
+                  </div><!-- /grid column -->
+                </div><!-- /grid row -->
+                <!-- card-deck-xl -->
+                <div class="card-deck-xl">
+                  <!-- .card -->
+                  <div class="card card-fluid">
+                    <div class="card-header">USDT @ ETH <i class="oi oi-arrow-right"></i> DAI @ BSC</div>
+                    <!-- .lits-group -->
+                    <div class="card-body">
+                      <!-- .section-block -->
+                      <div class="section-block">
+                        <ul class="timeline">
+                          <!-- .timeline-item -->
+                          <li class="timeline-item">
+                            <!-- .timeline-figure -->
+                            <div class="timeline-figure">
+                              <span class="tile tile-circle tile-sm">
+                                <i class="oi oi-data-transfer-downloadxx oi oi-check text-success fa-lg"></i>
+                              </span>
+                            </div><!-- /.timeline-figure -->
+                            <!-- .timeline-body -->
+                            <div class="timeline-body">
+                              <!-- .media -->
+                              <div class="media">
+                                <!-- .media-body -->
+                                <div class="media-body">
+                                  <h6 class="timeline-heading">Create USDT Deposit on ETH</h6>
+                                  <p class="mb-0">
+                                    [ETH: <a href="#0xxxx" class="text-link">0x483A...32fA</a>]
+                                    <a href="#0">0xF4b1...9E2a</a> created a <a href="#0">USDT</a> deposit on ETH
+                                    and set withdraw <a href="#0">DAI</a> to <a href="#0">0xF4b1...9E2a</a> on BSC.
+                                  </p>
+                                  <p class="timeline-date d-sm-none">2:01 PM</p>
+                                </div><!-- /.media-body -->
+                                <!-- .media-right -->
+                                <div class="d-none d-sm-block">
+                                  <span class="timeline-date">2:01 PM</span>
+                                </div><!-- /.media-right -->
+                              </div><!-- /.media -->
+                            </div><!-- /.timeline-body -->
+                          </li><!-- /.timeline-item -->
+                          <!-- .timeline-item -->
+                          <li class="timeline-item">
+                            <!-- .timeline-figure -->
+                            <div class="timeline-figure">
+                              <span class="tile tile-circle tile-sm"><i
+                                  class="oi oi-media-record text-warning pulse fa-lg"></i></span>
+                            </div><!-- /.timeline-figure -->
+                            <!-- .timeline-body -->
+                            <div class="timeline-body">
+                              <!-- .media -->
+                              <div class="media">
+                                <!-- .media-body -->
+                                <div class="media-body">
+                                  <h6 class="timeline-heading">
+                                    1/2 Authorities Sign the Transaction
+                                  </h6>
+                                  <p class="mb-0">[ETH: <a href="#0xxxx" class="text-link">0x483A...32fA</a>] Authority
+                                    <a href="#">0x38Af...48Fa</a> signed the transaction on ETH.
+                                  </p>
+                                  <p class="mb-0">[ETH: <a href="#0xxxx" class="text-link">0x483A...32fA</a>]
+                                    Authority <a href="#">0x38Af...48Fa</a> signed the transaction on ETH.
+                                  </p>
+                                  <p class="timeline-date d-sm-none">2:12 PM</p>
+                                </div><!-- /.media-body -->
+                                <!-- .media-right -->
+                                <div class="d-none d-sm-block">
+                                  <span class="timeline-date">2:12 PM</span>
+                                </div><!-- /.media-right -->
+                              </div><!-- /.media -->
+                            </div><!-- /.timeline-body -->
+                          </li><!-- /.timeline-item -->
+                          <!-- .timeline-item -->
+                          <li class="timeline-item">
+                            <!-- .timeline-figure -->
+                            <div class="timeline-figure">
+                              <span class="tile tile-circle tile-sm"><i class="oi fa-lg"></i></span>
+                            </div><!-- /.timeline-figure -->
+                            <!-- .timeline-body -->
+                            <div class="timeline-body">
+                              <!-- .media -->
+                              <div class="media">
+                                <!-- .media-body -->
+                                <div class="media-body">
+                                  <h6 class="timeline-heading">
+                                    Withdraw DAI at BSC
+                                  </h6>
+                                  <p class="mb-0">
+                                    [BSC: <a href="#0xxxx" class="text-link">0x483A...32fA</a>] Withdraw <a
+                                      href="#">DAI</a> at BSC to <a href="#0">0xF4b1...9E2a</a>.
+                                  </p>
+                                  <p class="timeline-date d-sm-none">2:12 PM</p>
+                                </div><!-- /.media-body -->
+                                <!-- .media-right -->
+                                <div class="d-none d-sm-block">
+                                  <span class="timeline-date">2:12 PM</span>
+                                </div><!-- /.media-right -->
+                              </div><!-- /.media -->
+                            </div><!-- /.timeline-body -->
+                          </li><!-- /.timeline-item -->
+                        </ul><!-- .timeline -->
+                        <p>Swap Done Successfully.</p>
+                      </div><!-- /.section-block -->
+                    </div><!-- /.card-body -->
+                  </div><!-- /.card -->
+                  <!-- .card -->
+                </div><!-- /card-deck-xl -->
+              </div><!-- /.page-section -->
+            </div><!-- /.container -->
+          </div><!-- /.page-inner -->
+        </div><!-- /.page -->
+      </div><!-- /.wrapper -->
+
+      <!--#include file="inc_footer.html"-->
+
+    </main><!-- /.app-main -->
+  </div><!-- /.app -->
+</body>
+
+</html>
