@@ -93,4 +93,6 @@ class SSIRequestHandler(SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    www = os.path.join(os.path.dirname(__file__), 'www')
+    os.chdir(www)
     SimpleHTTPServer.test(HandlerClass=SSIRequestHandler)
