@@ -14,28 +14,27 @@
       <!-- .navbar-nav -->
       <ul id="navItems" class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="#stable">Swap Stable Coins</a>
+          <a class="nav-link" href="/stable.shtml">Swap Stable Coins</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#erc">Swap ERC Tokens</a>
+          <a class="nav-link" href="/erc.shtml">Swap ERC Tokens</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#staking">Staking</a>
+          <a class="nav-link" href="/staking.shtml">Staking</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#docs">Docs</a>
+          <a class="nav-link" href="/docs.shtml">Docs</a>
         </li>
         <li class="nav-item" style="display: none;">
-          <a class="nav-link" href="#register">Register</a>
+          <a class="nav-link" href="/register.shtml">Register</a>
         </li>
       </ul><!-- /.navbar-nav -->
     </div><!-- /.navbar-collapse -->
 
     <script>
       $(function () {
-        let p = location.pathname.substring(1, location.pathname.length - 6),
-          nav = $('#navItems');
-        nav.find('a.nav-link[href="#' + p + '"]').parent().addClass('active').show();
+        let nav = $('#navItems');
+        nav.find('a.nav-link[href="'+ location.pathname + '"]').parent().addClass('active').attr('href', '#0').show();
       });
     </script>
 
