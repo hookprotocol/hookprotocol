@@ -5,8 +5,159 @@
   <!--#include file="inc_header.html"-->
   <script>
     $(function () {
+      initRegister();
       console.log('init dapp ok.');
     });
+
+    function createTarget() {
+      return {
+        chainId: '0',
+        token: '0x',
+        autoDeploy: false
+      };
+    }
+
+    function initRegister() {
+      window.vm = new Vue({
+        el: '#app',
+        data: {
+          submitting: false,
+          error: '',
+          chains: window.chains,
+          sourceChainId: 0,
+          sourceToken: '0x',
+          sourceTx: '',
+          targets: window.chains.map(createTarget),
+          targetEnables: window.chains.map(c => false),
+          targetChainIds: window.chains.map(c => c.chainId),
+          targetTokens: window.chains.map(c => '0x'),
+          targetAutoDeploys: window.chains.map(c => 'true'),
+          wallet: {
+            account: '',
+            chainId: 0,
+            chainName: '(none)',
+            name: 'Disconnected',
+            valid: false
+          }
+        },
+        methods: {
+          walletAccountChanged: function (accounts) {
+            console.log('wallet account changed:');
+            console.log(accounts);
+            if (accounts.length === 0) {
+              this.walletDisconnected();
+            } else {
+              this.wallet.account = accounts[0];
+            }
+          },
+
+          walletDisconnected: function () {
+            console.warn('wallet disconnected.');
+            this.wallet.account = null;
+            this.wallet.chainId = 0;
+            this.wallet.chainName = '(none)';
+            this.wallet.name = 'Disconnected';
+            this.wallet.valid = false;
+          },
+
+          walletChainChanged: function (chainId) {
+            console.log('wallet chainId changed: ' + chainId + ' = ' + parseInt(chainId, 16));
+            this.wallet.chainId = parseInt(chainId, 16);
+            let chain = this.chains.filter(c => c.chainId === this.wallet.chainId)[0];
+            this.wallet.chainName = chain ? chain.chainName : 'chain (' + this.wallet.chainId + ')';
+            this.wallet.name = chain ? chain.name : 'Invalid Chain (' + this.wallet.chainId + ')';
+            this.wallet.valid = chain ? true : false;
+          },
+
+          connectWallet: async function () {
+            if (getWeb3Provider() === null) {
+              return null;
+            }
+            try {
+              let accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts',
+              });
+              this.walletAccountChanged(accounts);
+              this.walletChainChanged(await window.ethereum.request({ method: 'eth_chainId' }))
+              window.ethereum.on('disconnect', this.walletDisconnected);
+              window.ethereum.on('accountsChanged', this.walletAccountChanged);
+              window.ethereum.on('chainChanged', this.walletChainChanged);
+            } catch (err) {
+              console.error(err);
+              this.showAlert('Could Not Connect Wallet', err.message || err.code);
+            }
+            return {
+              installed: getWeb3Provider() !== null,
+              web3Provider: getWeb3Provider(),
+              account: null,
+              chainId: ''
+            }
+          },
+
+          register: async function () {
+            this.error = '';
+            this.submitting = true;
+            try {
+              if (this.sourceChainId === 0) {
+                throw 'Please select source chain.';
+              }
+              if (!isValidAddress(this.sourceToken.trim())) {
+                throw 'Invalid source token address (or checksum failed).';
+              }
+              if (this.sourceTx.trim() !== '' && !isValidTx(this.sourceTx.trim())) {
+                throw 'Invalid source token creation tx.';
+              }
+              // validate each target chain:
+              let targetChainIds = [];
+              let targetTokens = [];
+              for (let i = 0; i < this.targets.length; i++) {
+                if (this.targetEnables[i] && this.targetChainIds[i] !== this.sourceChainId) {
+                  let autoDeploy = this.targetAutoDeploys[i] === 'true';
+                  if (!autoDeploy && !isValidAddress(this.targetTokens[i].trim())) {
+                    throw 'Target token address for chain ' + this.chains[i].name + ' is invalid (or checksum failed)';
+                  }
+                  targetChainIds.push(this.targetChainIds[i]);
+                  targetTokens.push(autoDeploy ? '0x0000000000000000000000000000000000000000' : this.targetTokens[i].trim());
+                }
+              }
+              if (targetChainIds.length === 0) {
+                throw 'Please select at least one target chain.';
+              }
+              if (this.sourceChainId !== this.wallet.chainId) {
+                throw 'Please switch chain to ' + this.chains.filter(c => c.chainId === this.sourceChainId)[0].name + ' in MetaMask.';
+              }
+              let
+                contract = loadContract('Registry', window.addresses[this.wallet.chainName]['Registry']),
+                data = {
+                  sourceToken: this.sourceToken.trim(),
+                  sourceTx: this.sourceTx.trim(),
+                  targetChainIds: targetChainIds,
+                  targetTokens: targetTokens
+                };
+
+              console.log(JSON.stringify(data, null, '  '));
+              let tx = await contract.register(this.sourceToken.trim(),
+                this.sourceTx.trim() !== '' ? this.sourceTx.trim() : '0x0000000000000000000000000000000000000000000000000000000000000000',
+                targetChainIds,
+                targetTokens
+              );
+              await tx.wait(1);
+              console.log('register success!');
+            } catch (err) {
+              console.error(err);
+              if (typeof (err) === 'string') {
+                this.error = err;
+              } else {
+                this.error = err.toString();
+              }
+            }
+            this.submitting = false;
+          }
+        }
+      });
+      window.vm.connectWallet();
+    }
+
   </script>
 </head>
 
@@ -54,129 +205,109 @@
                   <div class="col-12">
                     <!-- .card -->
                     <div class="card card-fluid">
-                      <!-- .card-body -->
-                      <div class="card-body">
-                        <h3 class="card-title mb-4">Register ERC Token</h3>
-                        <form>
-                          <!-- .fieldset -->
-                          <fieldset>
-                            <div class="row">
-                              <div class="col-12">
-                                <label for="tf2">Source chain and source token address:</label>
-                              </div>
-                            </div>
-                            <div class="row mb-4">
-                              <div class="col-6">
-                                <select class="custom-select" id="sourceChain" required="">
-                                  <option value="">From Chain ...</option>
-                                  <option value="ETH_MAINNET">ETH</option>
-                                  <option value="BSC_MAINNET">BSC</option>
-                                  <option value="HECO_MAINNET">Heco</option>
-                                  <option value="OKCHAIN_MAINNET">OKChain</option>
-                                </select>
-                                <small class="form-text text-muted">Please collect your wallet to the selected
-                                  chain.</small>
-                              </div>
-                              <div class="col-6">
-                                <input type="text" class="form-control" id="sourceToken" value="0x"
-                                  placeholder="Token Address">
-                                <small class="form-text text-muted">You must be deployer or owner of this
-                                  token.</small>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-12">
-                                <label>Source token deployer transaction hash:</label>
-                              </div>
-                            </div>
-                            <div class="row mb-4">
-                              <div class="col-6">
-                                <input type="text" class="form-control" id="sourceToken" value=""
-                                  placeholder="Transaction Hash">
-                                <small class="form-text text-muted">The deployer transaction can help verify your token
-                                  much faster. Leave it empty if you are not sure the transaction hash.</small>
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-12">
-                                <label>Target chain and target token address:</label>
-                              </div>
-                            </div>
-                            <div class="row mb-4">
-                              <div class="col-6">
-                                <select class="custom-select" required="">
-                                  <option value="">To Chain ...</option>
-                                  <option value="ETH_MAINNET">ETH</option>
-                                  <option value="BSC_MAINNET">BSC</option>
-                                  <option value="HECO_MAINNET">Heco</option>
-                                  <option value="OKCHAIN_MAINNET">OKChain</option>
-                                </select>
-                              </div>
-                              <div class="col-6">
-                                <input type="text" class="form-control" id="targetToken" value="0x"
-                                  placeholder="Token Address">
-                              </div>
-                            </div>
-                            <div class="row mb-4">
-                              <div class="col-6">
-                                <select class="custom-select" required="">
-                                  <option value="">To Chain ...</option>
-                                  <option value="ETH_MAINNET">ETH</option>
-                                  <option value="BSC_MAINNET">BSC</option>
-                                  <option value="HECO_MAINNET">Heco</option>
-                                  <option value="OKCHAIN_MAINNET">OKChain</option>
-                                </select>
-                              </div>
-                              <div class="col-6">
-                                <input type="text" class="form-control" id="targetToken" value="0x"
-                                  placeholder="Token Address">
-                              </div>
-                            </div>
-                            <div class="row mb-4">
-                              <div class="col-6">
-                                <select class="custom-select" required="">
-                                  <option value="">To Chain ...</option>
-                                  <option value="ETH_MAINNET">ETH</option>
-                                  <option value="BSC_MAINNET">BSC</option>
-                                  <option value="HECO_MAINNET">Heco</option>
-                                  <option value="OKCHAIN_MAINNET">OKChain</option>
-                                </select>
-                                <small class="form-text text-muted">Target chain must be different to source
-                                  chain.</small>
-                              </div>
-                              <div class="col-6">
-                                <input type="text" class="form-control" id="targetToken" value="0x"
-                                  placeholder="Token Address">
-                                <small class="form-text text-muted">Token decimals must be same as source token.</small>
-                              </div>
-                            </div>
-                            <div class="row mb-4" style="display: none;">
-                              <div class="col-12">
-                                <a href="#0"><i class="oi oi-plus"></i> Add More Cross Chain</a>
-                              </div>
-                            </div>
-                            <!-- .form-group -->
-                            <div class="form-group">
-                              <button class="btn btn-primary btn-lg btn-block" type="button">
-                                <span class="spinner-border spinner-border-sm" role="status"></span>
-                                Register Tokens for Cross Chain
-                              </button>
-                            </div><!-- /.form-group -->
-                          </fieldset><!-- /.fieldset -->
-                        </form>
-                      </div><!-- /.card-body -->
-                    </div><!-- /.card -->
-                  </div><!-- /grid column -->
-                </div><!-- /grid row -->
-              </div><!-- /.page-section -->
-            </div><!-- /.container -->
-          </div><!-- /.page-inner -->
-        </div><!-- /.page -->
-      </div><!-- /.wrapper -->
+                      <form v-on:submit.prevent="register">
 
-      <!--#include file="inc_footer.html"-->
+                        <div class="card-body">
+                          <h3 class="card-title mb-4">Register ERC Token for Cross Chain</h3>
+                          <p>Please read the <a target="_blank" href="#0">registration guide</a> before register tokens
+                            for cross chain.</p>
+                        </div>
 
-    </main><!-- /.app-main -->
+                        <div class="card-body border-top">
+                          <div class="mb-4">
+                            <label>Source chain:</label>
+                            <select v-model.number="sourceChainId" class="custom-select" required="">
+                              <option value="0">From Chain ...</option>
+                              <option v-for="c in chains" v-bind:value="c.chainId">{{ c.name }}</option>
+                            </select>
+                            <small class="form-text text-muted">Please collect your wallet to the selected
+                              chain.</small>
+                          </div>
+                          <div class="mb-4">
+                            <label>Source token address:</label>
+                            <input v-model="sourceToken" type="text" class="form-control" placeholder="Token Address">
+                            <small class="form-text text-muted">You must be deployer or owner of this
+                              token.</small>
+                          </div>
+                          <div class="mb-2">
+                            <label>Source token deployer transaction hash:</label>
+                            <input v-model="sourceTx" type="text" class="form-control" placeholder="Transaction Hash">
+                            <small class="form-text text-muted">The deployer transaction can help verify your token
+                              much faster. Leave it empty if you are not sure the transaction hash.</small>
+                          </div>
+                        </div>
+
+                        <div class="card-body border-top" v-for="(chain,index) in chains" class="mb-2"
+                          v-show="chain.chainId !== sourceChainId">
+                          <!-- enable chain -->
+                          <div class="mb-2 custom-control custom-control-inline custom-checkbox">
+                            <input v-model="targetEnables[index]" type="checkbox" class="custom-control-input"
+                              v-bind:id="'targetEnables'+index"> <label class="custom-control-label"
+                              v-bind:for="'targetEnables'+index">Enable cross chain to <a target="_blank"
+                                v-bind:href="chain.infoURL">{{ chain.name }} <i
+                                  class="oi oi-external-link"></i></a></label>
+                          </div>
+                          <!-- /enable chain -->
+                          <div v-show="targetEnables[index]" class="ml-4">
+                            <!-- auto deploy token -->
+                            <div class="custom-control custom-radio mb-1">
+                              <input type="radio" v-model="targetAutoDeploys[index]" value="true" checked
+                                class="custom-control-input" v-bind:name="'opt-'+index" v-bind:id="'opt-auto-'+index">
+                              <label class="custom-control-label" v-bind:for="'opt-auto-'+index">Auto deploy target
+                                token</label>
+                              <div class="text-muted">The target token on {{ chain.name }} will be auto deployed by Hook
+                                Protocol.</div>
+                            </div>
+                            <!-- /auto deploy token -->
+                            <!-- specify token address -->
+                            <div class="custom-control custom-radio mb-1">
+                              <input type="radio" v-model="targetAutoDeploys[index]" value="false"
+                                class="custom-control-input" v-bind:name="'opt-'+index" v-bind:id="'opt-token-'+index">
+                              <label class="custom-control-label" v-bind:for="'opt-token-'+index">Specify target token
+                                address</label>
+                            </div>
+                            <div v-show="targetAutoDeploys[index]==='false'" class="custom-control mb-2">
+                              <input v-model="targetTokens[index]" type="text" class="form-control"
+                                placeholder="Token Address">
+                              <div class="text-muted">Target token decimals must be same as source
+                                token. <a target="_blank"
+                                  v-bind:href="chain.explorers.url+'/token/'+targetTokens[index]">Check token on {{
+                                  chain.name }} <i class="oi oi-external-link"></i></a></div>
+                            </div>
+                            <!-- /specify token address -->
+                          </div>
+                        </div>
+
+                        <div class="card-body border-top">
+                          <div v-show="error !== ''" class="alert alert-danger has-icon" role="alert">
+                            <div class="alert-icon">
+                              <span class="oi oi-warning"></span>
+                            </div>
+                            <p>{{ error }}</p>
+                          </div>
+                          <!-- .form-group -->
+                          <div class="form-group mt-3">
+                            <button class="btn btn-primary btn-lg btn-block" type="submit" v-bind:disabled="submitting">
+                              <span v-show="submitting" class="spinner-border spinner-border-sm" role="status"></span>
+                              Register Tokens for Cross Chain
+                            </button>
+                          </div><!-- /.form-group -->
+                        </div>
+                      </form>
+                    </div>
+                  </div><!-- /.card -->
+                </div><!-- /grid column -->
+              </div><!-- /grid row -->
+            </div><!-- /.page-section -->
+          </div><!-- /.container -->
+        </div><!-- /.page-inner -->
+      </div><!-- /.page -->
+    </main>
+  </div><!-- /.wrapper -->
+
+  <!--#include file="inc_footer.html"-->
+
+  </main><!-- /.app-main -->
   </div><!-- /.app -->
 </body>
 

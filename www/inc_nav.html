@@ -31,30 +31,20 @@
       </ul><!-- /.navbar-nav -->
     </div><!-- /.navbar-collapse -->
 
-    <script>
-      $(function () {
-        let nav = $('#navItems');
-        nav.find('a.nav-link[href="'+ location.pathname + '"]').parent().addClass('active').attr('href', '#0').show();
-      });
-    </script>
-
     <!-- .btn-account -->
-    <div class="navbar-nav dropdown d-flex mr-lg-n3">
+    <div v-bind:class="{'bg-danger': !wallet.valid}" class="navbar-nav dropdown d-flex mr-lg-n3">
       <button class="btn-account w-100" type="button" data-toggle="dropdown" aria-haspopup="true"
-        aria-expanded="false"><span class="user-avatar user-avatar-md mr-lg-0"><img src="assets/images/crypto/ETH.svg"
-            alt=""></span>
+        aria-expanded="false"><span class="user-avatar user-avatar-md mr-lg-0"><img
+            src="assets/images/crypto/ETH.svg"></span>
         <span class="account-summary pl-2">
-          <span class="account-name">Ethereum Mainnet</span>
-          <span class="account-description">0x35F1f0...9c8E09</span>
+          <span class="account-name">{{ wallet.name }}</span>
+          <span class="account-description">{{ wallet.account|abbrAddr }}</span>
         </span>
       </button> <!-- .dropdown-menu -->
       <div class="dropdown-menu dropdown-menu-right">
         <div class="dropdown-arrow mr-3"></div>
-        <h6 class="dropdown-header d-none d-lg-block d-lg-none">Ethereum Mainnet</h6><a class="dropdown-item"
-          href="user-profile.html"><span class="dropdown-icon oi oi-person"></span> Profile</a> <a class="dropdown-item"
-          href="auth-signin-v1.html"><span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
-        <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Help Center</a> <a class="dropdown-item"
-          href="#">Ask Forum</a> <a class="dropdown-item" href="#">Keyboard Shortcuts</a>
+        <h6 class="dropdown-header d-none d-lg-block d-lg-none">{{ wallet.name }}</h6>
+        <a class="dropdown-item" href="#0"><span class="dropdown-icon oi oi-person"></span> View Address</a>
       </div><!-- /.dropdown-menu -->
     </div><!-- /.btn-account -->
   </div><!-- /.container -->
