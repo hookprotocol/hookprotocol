@@ -5,33 +5,38 @@
   <!--#include file="inc_header.html"-->
   <script>
     $(function () {
-      initRegister();
+      initErc();
       console.log('init dapp ok.');
     });
 
-    function createTarget() {
-      return {
-        chainId: '0',
-        token: '0x',
-        autoDeploy: false
-      };
-    }
-
-    function initRegister() {
+    function initErc() {
       window.vm = new Vue({
         el: '#app',
         data: {
           submitting: false,
           error: '',
           chains: window.chains,
+          bridgeConfigs: [
+            {
+              token: 'PLUT',
+              fee: [10, 20, 20000],
+              decimals: 18,
+              chainIds: [4, 42, 97, 256],
+              tokens: ['0x5f87f75bd9e3c2611a12932ac57739f3d90d10fe', '0x5f87f75bd9e3c2611a12932ac57739f3d90d10fe', '0x5f87f75bd9e3c2611a12932ac57739f3d90d10fe', '0x5f87f75bd9e3c2611a12932ac57739f3d90d10fe']
+            },
+            {
+              token: 'HOOK',
+              fee: [10, 20, 20000],
+              decimals: 18,
+              chainIds: [4, 42, 97],
+              tokens: ['0xa66ab55c2d2dc593c2a68325a6e6ebe5da485a5a', '0xa66ab55c2d2dc593c2a68325a6e6ebe5da485a5a', '0xa66ab55c2d2dc593c2a68325a6e6ebe5da485a5a']
+            }
+          ],
+          bridgeHash: '',
           sourceChainId: 0,
-          sourceToken: '',
-          sourceTx: '',
-          targets: window.chains.map(createTarget),
-          targetEnables: window.chains.map(c => false),
-          targetChainIds: window.chains.map(c => c.chainId),
-          targetTokens: window.chains.map(c => '0x'),
-          targetAutoDeploys: window.chains.map(c => 'true'),
+          targetChainId: 0,
+          amount: '',
+          fee: 0,
           wallet: {
             account: '',
             chainId: 0,
@@ -94,34 +99,21 @@
             }
           },
 
-          register: async function () {
+          crossTransfer: async function () {
             this.error = '';
             this.submitting = true;
             try {
+              if (this.bridgeHash === '') {
+                throw 'Please select a token.';
+              }
               if (this.sourceChainId === 0) {
                 throw 'Please select source chain.';
               }
-              if (!isValidAddress(this.sourceToken.trim())) {
-                throw 'Invalid source token address (or checksum failed).';
+              if (this.targetChainId === 0) {
+                throw 'Please select source chain.';
               }
-              if (this.sourceTx.trim() !== '' && !isValidTx(this.sourceTx.trim())) {
-                throw 'Invalid source token creation tx.';
-              }
-              // validate each target chain:
-              let targetChainIds = [];
-              let targetTokens = [];
-              for (let i = 0; i < this.targets.length; i++) {
-                if (this.targetEnables[i] && this.targetChainIds[i] !== this.sourceChainId) {
-                  let autoDeploy = this.targetAutoDeploys[i] === 'true';
-                  if (!autoDeploy && !isValidAddress(this.targetTokens[i].trim())) {
-                    throw 'Target token address for chain ' + this.chains[i].name + ' is invalid (or checksum failed)';
-                  }
-                  targetChainIds.push(this.targetChainIds[i]);
-                  targetTokens.push(autoDeploy ? '0x0000000000000000000000000000000000000000' : this.targetTokens[i].trim());
-                }
-              }
-              if (targetChainIds.length === 0) {
-                throw 'Please select at least one target chain.';
+              if (this.amount.trim() === '') {
+                throw 'Please enter amount.';
               }
 
               await this.connectWallet();
@@ -130,7 +122,7 @@
                 throw 'Please switch chain to ' + this.chains.filter(c => c.chainId === this.sourceChainId)[0].name + ' in MetaMask.';
               }
               let
-                contract = loadContract('Registry', window.addresses[this.wallet.chainName]['Registry']),
+                contract = loadContract('Bridge', window.addresses[this.wallet.chainName]['Bridge']),
                 data = {
                   sourceToken: this.sourceToken.trim(),
                   sourceTx: this.sourceTx.trim(),
@@ -139,18 +131,15 @@
                 };
 
               console.log(JSON.stringify(data, null, '  '));
-              // query register fee:
+              // query transfer fee:
               let fee = await contract.fee();
               let tx = await contract.register(this.sourceToken.trim(),
                 this.sourceTx.trim() !== '' ? this.sourceTx.trim() : '0x0000000000000000000000000000000000000000000000000000000000000000',
                 targetChainIds,
-                targetTokens,
-                {
-                  value: fee
-                }
+                targetTokens
               );
               await tx.wait(1);
-              console.log('register success!');
+              console.log('transfer success!');
             } catch (err) {
               window.lastError = err;
               console.error(err);
@@ -208,76 +197,51 @@
                   <div class="col-12">
                     <!-- .card -->
                     <div class="card card-fluid">
-                      <form v-on:submit.prevent="register">
+                      <form v-on:submit.prevent="crossTransfer">
 
                         <div class="card-body">
-                          <h3 class="card-title mb-4">Register ERC Token for Cross Chain</h3>
-                          <p>Please read the <a target="_blank" href="#0">registration guide</a> before register tokens
-                            for cross chain.</p>
+                          <h3 class="card-title mb-4">Transfer ERC Token for Cross Chain</h3>
+                        </div>
+
+                        <div class="card-body border-top mb-2">
+                          <label>Select Token for Cross Transfer:</label>
+                          <select v-model="bridgeHash" class="custom-select" required="">
+                            <option value="">Select Token ...</option>
+                            <option v-for="b in bridgeConfigs" v-bind:value="b.bridgeHash">{{ b.token }}</option>
+                          </select>
                         </div>
 
                         <div class="card-body border-top">
-                          <div class="mb-4">
-                            <label>Source chain:</label>
-                            <select v-model.number="sourceChainId" class="custom-select" required="">
-                              <option value="0">From Chain ...</option>
-                              <option v-for="c in chains" v-bind:value="c.chainId">{{ c.name }}</option>
-                            </select>
-                            <small class="form-text text-muted">Please collect your wallet to the selected
-                              chain.</small>
-                          </div>
-                          <div class="mb-4">
-                            <label>Source token address:</label>
-                            <input v-model="sourceToken" type="text" class="form-control" placeholder="Token Address">
-                            <small class="form-text text-muted">You must be deployer or owner of this
-                              token.</small>
-                          </div>
-                          <div class="mb-2">
-                            <label>Source token deployer transaction hash:</label>
-                            <input v-model="sourceTx" type="text" class="form-control" placeholder="Transaction Hash">
-                            <small class="form-text text-muted">The deployer transaction can help verify your token
-                              much faster. Leave it empty if you are not sure the transaction hash.</small>
+                          <div class="row">
+                            <div class="col-5">
+                              <label>Source chain:</label>
+                              <select v-model.number="sourceChainId" class="custom-select" required="">
+                                <option value="0">From Chain ...</option>
+                                <option v-for="c in chains" v-bind:value="c.chainId">{{ c.name }}</option>
+                              </select>
+                              <small class="form-text text-muted">Please collect your wallet to the selected
+                                chain.</small>
+                            </div>
+                            <div class="col-2 text-center">
+                              <label>&nbsp;</label>
+                              <br>
+                              <i class="oi oi-arrow-right"></i>
+                            </div>
+                            <div class="col-5">
+                              <label>Target chain:</label>
+                              <select v-model.number="targetChainId" class="custom-select" required="">
+                                <option value="0">To Chain ...</option>
+                                <option v-for="c in chains" v-bind:value="c.chainId">{{ c.name }}</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
 
-                        <div class="card-body border-top mb-2" v-for="(chain,index) in chains"
-                          v-show="chain.chainId !== sourceChainId">
-                          <!-- enable chain -->
-                          <div class="mb-2 custom-control custom-control-inline custom-checkbox">
-                            <input v-model="targetEnables[index]" type="checkbox" class="custom-control-input"
-                              v-bind:id="'targetEnables'+index"> <label class="custom-control-label"
-                              v-bind:for="'targetEnables'+index">Enable cross chain to <a target="_blank"
-                                v-bind:href="chain.infoURL">{{ chain.name }} <i
-                                  class="oi oi-external-link"></i></a></label>
-                          </div>
-                          <!-- /enable chain -->
-                          <div v-show="targetEnables[index]" class="ml-4">
-                            <!-- auto deploy token -->
-                            <div class="custom-control custom-radio mb-1">
-                              <input type="radio" v-model="targetAutoDeploys[index]" value="true" checked
-                                class="custom-control-input" v-bind:name="'opt-'+index" v-bind:id="'opt-auto-'+index">
-                              <label class="custom-control-label" v-bind:for="'opt-auto-'+index">Auto deploy target
-                                token</label>
-                              <div class="text-muted">The target token on {{ chain.name }} will be auto deployed by Hook
-                                Protocol.</div>
-                            </div>
-                            <!-- /auto deploy token -->
-                            <!-- specify token address -->
-                            <div class="custom-control custom-radio mb-1">
-                              <input type="radio" v-model="targetAutoDeploys[index]" value="false"
-                                class="custom-control-input" v-bind:name="'opt-'+index" v-bind:id="'opt-token-'+index">
-                              <label class="custom-control-label" v-bind:for="'opt-token-'+index">Specify target token
-                                address</label>
-                            </div>
-                            <div v-show="targetAutoDeploys[index]==='false'" class="custom-control mb-2">
-                              <input v-model="targetTokens[index]" type="text" class="form-control"
-                                placeholder="Token Address">
-                              <div class="text-muted">Target token decimals must be same as source
-                                token. <a target="_blank"
-                                  v-bind:href="chain.explorers.url+'/token/'+targetTokens[index]">Check token on {{
-                                  chain.name }} <i class="oi oi-external-link"></i></a></div>
-                            </div>
-                            <!-- /specify token address -->
+                        <div class="card-body border-top">
+                          <div class="mb-2">
+                            <label>Transfer Amount:</label>
+                            <input v-model="amount" type="text" class="form-control" placeholder="Amount">
+                            <small class="form-text text-muted">Estimated fee: <span>{{ fee }}</span></small>
                           </div>
                         </div>
 
@@ -292,7 +256,7 @@
                           <div class="form-group mt-3">
                             <button class="btn btn-primary btn-lg btn-block" type="submit" v-bind:disabled="submitting">
                               <span v-show="submitting" class="spinner-border spinner-border-sm" role="status"></span>
-                              Register Tokens for Cross Chain
+                              Start Cross Transfer
                             </button>
                           </div><!-- /.form-group -->
                         </div>
