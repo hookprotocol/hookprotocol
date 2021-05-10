@@ -25,7 +25,7 @@
           error: '',
           chains: window.chains,
           sourceChainId: 0,
-          sourceToken: '0x',
+          sourceToken: '',
           sourceTx: '',
           targets: window.chains.map(createTarget),
           targetEnables: window.chains.map(c => false),
@@ -144,12 +144,9 @@
               await tx.wait(1);
               console.log('register success!');
             } catch (err) {
+              window.lastError = err;
               console.error(err);
-              if (typeof (err) === 'string') {
-                this.error = err;
-              } else {
-                this.error = err.toString();
-              }
+              this.error = translateError(err);
             }
             this.submitting = false;
           }

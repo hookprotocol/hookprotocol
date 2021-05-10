@@ -12,6 +12,19 @@ $(function () {
     nav.find('a.nav-link[href="' + location.pathname + '"]').parent().addClass('active').attr('href', '#0').show();
 });
 
+function translateError(err) {
+    if (typeof (err) === 'string') {
+        return err;
+    }
+    if (err.code && err.message && err.data) {
+        return `Error (${err.code}): ${err.message} Data: ${err.data}`;
+    }
+    if (err.code && err.message) {
+        return `Error (${err.code}): ${err.message}`;
+    }
+    return err.message || err.toString();
+}
+
 const regexTx = /^0x[a-f0-9]{64}$/;
 
 function isValidTx(tx) {
