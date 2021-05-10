@@ -123,6 +123,9 @@
               if (targetChainIds.length === 0) {
                 throw 'Please select at least one target chain.';
               }
+
+              await this.connectWallet();
+              
               if (this.sourceChainId !== this.wallet.chainId) {
                 throw 'Please switch chain to ' + this.chains.filter(c => c.chainId === this.sourceChainId)[0].name + ' in MetaMask.';
               }
@@ -136,10 +139,15 @@
                 };
 
               console.log(JSON.stringify(data, null, '  '));
+              // query register fee:
+              let fee = await contract.fee();
               let tx = await contract.register(this.sourceToken.trim(),
                 this.sourceTx.trim() !== '' ? this.sourceTx.trim() : '0x0000000000000000000000000000000000000000000000000000000000000000',
                 targetChainIds,
-                targetTokens
+                targetTokens,
+                {
+                  value: fee
+                }
               );
               await tx.wait(1);
               console.log('register success!');
@@ -152,7 +160,6 @@
           }
         }
       });
-      window.vm.connectWallet();
     }
 
   </script>
