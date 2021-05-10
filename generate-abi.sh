@@ -8,7 +8,7 @@ echo "// generate abi" > $TARGET
 
 echo "window.abis = {}" >> $TARGET
 
-for file in Registry Whitelist Bridge IHookERC20
+for file in Registry Whitelist Bridge HookBridgeERC20
 do
     echo "process $file.json..."
     echo -n "window.abis.$file = " >> $TARGET

@@ -39,6 +39,7 @@ function isValidAddress(addr) {
 }
 
 function loadContract(abiName, address) {
+    console.log(`load contract ${abiName} at address ${address}...`);
     if (!window._contractsCache) {
         window._contractsCache = {};
     }
