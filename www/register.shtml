@@ -130,7 +130,7 @@
                 throw 'Please switch chain to ' + this.chains.filter(c => c.chainId === this.sourceChainId)[0].name + ' in MetaMask.';
               }
               let
-                contract = loadContract('Registry', window.addresses[this.wallet.chainName]['Registry']),
+                contract = loadContract('Registry', window.addresses[this.wallet.chainName]['Registry'].address),
                 data = {
                   sourceToken: this.sourceToken.trim(),
                   sourceTx: this.sourceTx.trim(),
