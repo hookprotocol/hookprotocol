@@ -18,3 +18,8 @@ done
 
 echo -n "window.addresses = " >> $TARGET
 more ../contracts/contracts.json >> $TARGET
+echo "" >> $TARGET
+
+echo -n "window.chainsDefinitions = " >> $TARGET
+more ../contracts/chains.json >> $TARGET
+echo "" >> $TARGET
