@@ -4,11 +4,30 @@
 <head>
   <!--#include file="inc_header.html"-->
   <script>
-
     $(function () {
       initialize();
       console.log('init dapp ok.');
     });
+
+    var LoadinngPanel = {
+      props: ['hide'],
+      template: `<></>`,
+    }  
+    Vue.component('approve-panel', {
+      data: function() {
+        configs: []
+      },
+      template: `
+      `,
+      methods: {
+        async loadToApproveConfigs() {
+          
+        }
+      },
+      async mounted() {
+
+      }
+    })
 
     function createTarget() {
       return {
@@ -17,37 +36,6 @@
         autoDeploy: false
       };
     }
-
-    Vue.component('wallet-info', {
-      props: ['currentAccount', 'chainId'],
-
-      computed: {
-        isTestnet() {
-          return false
-        },
-        chainName() {
-          return 'Mainnet'
-        },
-        chainLogo() {
-          return './assets/images/ETH.svg'
-        }
-      },
-
-      template: `
-        <div class="d-flex">
-          <div class="isTestnet: bg-warning">
-            <figure class="user-avatar p-2">
-              <img :src="chainLogo">
-            </figure>
-          </div>
-          <span> {{ currentAccount }} </span>
-        </div>
-      `,
-    })
-
-    Vue.component('wallet', {
-      
-    })
 
     function initialize() {
       window.vm = new Vue({
@@ -73,124 +61,26 @@
           }
         },
         methods: {
-          walletAccountChanged: function (accounts) {
-            console.log('wallet account changed:');
-            console.log(accounts);
-            if (accounts.length === 0) {
-              this.walletDisconnected();
-            } else {
-              this.wallet.account = accounts[0];
-            }
+          async getConfigs(status) {
           },
 
-          walletDisconnected: function () {
-            console.warn('wallet disconnected.');
-            this.wallet.account = null;
-            this.wallet.chainId = 0;
-            this.wallet.chainName = '(none)';
-            this.wallet.name = 'Disconnected';
-            this.wallet.valid = false;
+          async approveConfig() {
+
           },
 
-          walletChainChanged: function (chainId) {
-            console.log('wallet chainId changed: ' + chainId + ' = ' + parseInt(chainId, 16));
-            this.wallet.chainId = parseInt(chainId, 16);
-            let chain = this.chains.filter(c => c.chainId === this.wallet.chainId)[0];
-            this.wallet.chainName = chain ? chain.chainName : 'chain (' + this.wallet.chainId + ')';
-            this.wallet.name = chain ? chain.name : 'Invalid Chain (' + this.wallet.chainId + ')';
-            this.wallet.valid = chain ? true : false;
+          async disableToken() {
+
           },
+          async enableToken() {
 
-          connectWallet: async function () {
-            if (getWeb3Provider() === null) {
-              return null;
-            }
-            try {
-              let accounts = await window.ethereum.request({
-                method: 'eth_requestAccounts',
-              });
-              this.walletAccountChanged(accounts);
-              this.walletChainChanged(await window.ethereum.request({ method: 'eth_chainId' }))
-              window.ethereum.on('disconnect', this.walletDisconnected);
-              window.ethereum.on('accountsChanged', this.walletAccountChanged);
-              window.ethereum.on('chainChanged', this.walletChainChanged);
-            } catch (err) {
-              console.error(err);
-              this.showAlert('Could Not Connect Wallet', err.message || err.code);
-            }
-            return {
-              installed: getWeb3Provider() !== null,
-              web3Provider: getWeb3Provider(),
-              account: null,
-              chainId: ''
-            }
           },
+          async setFee() {
 
-          register: async function () {
-            this.error = '';
-            this.submitting = true;
-            try {
-              if (this.sourceChainId === 0) {
-                throw 'Please select source chain.';
-              }
-              if (!isValidAddress(this.sourceToken.trim())) {
-                throw 'Invalid source token address (or checksum failed).';
-              }
-              if (this.sourceTx.trim() !== '' && !isValidTx(this.sourceTx.trim())) {
-                throw 'Invalid source token creation tx.';
-              }
-              // validate each target chain:
-              let targetChainIds = [];
-              let targetTokens = [];
-              for (let i = 0; i < this.targets.length; i++) {
-                if (this.targetEnables[i] && this.targetChainIds[i] !== this.sourceChainId) {
-                  let autoDeploy = this.targetAutoDeploys[i] === 'true';
-                  if (!autoDeploy && !isValidAddress(this.targetTokens[i].trim())) {
-                    throw 'Target token address for chain ' + this.chains[i].name + ' is invalid (or checksum failed)';
-                  }
-                  targetChainIds.push(this.targetChainIds[i]);
-                  targetTokens.push(autoDeploy ? '0x0000000000000000000000000000000000000000' : this.targetTokens[i].trim());
-                }
-              }
-              if (targetChainIds.length === 0) {
-                throw 'Please select at least one target chain.';
-              }
+          },
+          async createERC20() {
 
-              await this.connectWallet();
-
-              if (this.sourceChainId !== this.wallet.chainId) {
-                throw 'Please switch chain to ' + this.chains.filter(c => c.chainId === this.sourceChainId)[0].name + ' in MetaMask.';
-              }
-              let
-                contract = loadContract('Registry', window.addresses[this.wallet.chainName]['Registry'].address),
-                data = {
-                  sourceToken: this.sourceToken.trim(),
-                  sourceTx: this.sourceTx.trim(),
-                  targetChainIds: targetChainIds,
-                  targetTokens: targetTokens
-                };
-
-              console.log(JSON.stringify(data, null, '  '));
-              // query register fee:
-              let fee = await contract.fee();
-              let tx = await contract.register(this.sourceToken.trim(),
-                this.sourceTx.trim() !== '' ? this.sourceTx.trim() : '0x0000000000000000000000000000000000000000000000000000000000000000',
-                targetChainIds,
-                targetTokens,
-                {
-                  value: fee
-                }
-              );
-              await tx.wait(1);
-              console.log('register success!');
-            } catch (err) {
-              window.lastError = err;
-              console.error(err);
-              this.error = translateError(err);
-            }
-            this.submitting = false;
           }
-        }
+        }  
       });
     }
   </script>
@@ -198,7 +88,7 @@
 
 <body>
   <!-- .app -->
-  <div id="app" class="app has-fullwidth">
+  <div class="app has-fullwidth">
     <!--[if lt IE 10]>
       <div class="page-message" role="alert">You are using an <strong>outdated</strong> browser. Please <a class="alert-link" href="http://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</div>
       <![endif]-->
@@ -208,7 +98,7 @@
     </header><!-- /.app-header -->
     <!-- /.app-header -->
     <!-- .app-main -->
-    <main class="app-main">
+    <main  id="app" class="app-main">
       <!-- .wrapper -->
       <div class="wrapper">
         <!-- .page -->
@@ -217,21 +107,6 @@
           <div class="page-inner">
             <!-- .container -->
             <div class="container">
-              <!-- .page-title-bar -->
-              <header class="page-title-bar">
-                <div class="d-flex flex-column flex-md-row">
-                  <p class="lead">
-                    <span class="font-weight-bold">Register Your ERC Token for Cross Chain</span>
-                    <span class="d-block text-muted">Any ERC Token can be registered by its owner.</span>
-                    <span class="d-block text-muted">Please read the <a target="_blank" href="#0">registration guide</a>
-                      before register
-                      tokens for cross
-                      chain.</span>
-                  </p>
-                  <div class="ml-auto">
-                  </div>
-                </div>
-              </header><!-- /.page-title-bar -->
               <!-- .page-section -->
               <div class="page-section">
                 <!-- grid row -->
@@ -253,7 +128,7 @@
                             <label>Source chain:</label>
                             <select v-model.number="sourceChainId" class="custom-select" required="">
                               <option value="0">From Chain ...</option>
-                              <option v-for="c in chains" v-bind:value="c.chainId">{{ c.name }}</option>
+                              <option v-for="c in chains" v-bind:value="c.chainId" :key='c.chainId'>{{ c.chainName }}</option>
                             </select>
                             <small class="form-text text-muted">Please collect your wallet to the selected
                               chain.</small>
@@ -324,7 +199,7 @@
                           <div class="form-group mt-3">
                             <button class="btn btn-primary btn-lg btn-block" type="submit" v-bind:disabled="submitting">
                               <span v-show="submitting" class="spinner-border spinner-border-sm" role="status"></span>
-                              Register Tokens for Cross Chain
+                              Register
                             </button>
                           </div><!-- /.form-group -->
                         </div>

@@ -1,0 +1,38 @@
+{
+  "updatedAt": 199,
+  "tokens": {
+    "XUSD": {
+      "chains": [1],
+      "addresses": [""],
+      "name": "CrossUSD",
+      "symbol": "XUSD",
+      "decimals": 18,
+      "totalSupply": "",
+      "sourceChain": 1,
+      "iconURL": "",
+      "website": ""
+    },
+    "DAI": {
+      "chains": [1],
+      "addresses": [""],
+      "name": "DAI",
+      "symbol": "DAI",
+      "decimals": 18,
+      "totalSupply": "",
+      "sourceChain": 1,
+      "iconURL": "",
+      "website": ""
+    },
+    "ETH": {
+      "chains": [1],
+      "addresses": [""],
+      "name": "ETH",
+      "symbol": "ETH",
+      "decimals": 18,
+      "totalSupply": "",
+      "sourceChain": 1,
+      "iconURL": "",
+      "website": ""
+    }
+  }
+}

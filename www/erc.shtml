@@ -9,6 +9,17 @@
       console.log('init dapp ok.');
     });
 
+    var TokenListItem = {
+      props: ['token'],
+      template: `
+        <li class="list-group-item d-flex justify-content-start align-items-center">
+          <div class="tile tile-circle">
+            <img :src="token.iconURL"/>
+          </div>
+          {{token.symbol}}
+        </li>`
+    };
+
     function initErc() {
       window.vm = new Vue({
         el: '#app',
@@ -175,20 +186,6 @@
             <!-- .container -->
             <div class="container">
               <!-- .page-title-bar -->
-              <header class="page-title-bar">
-                <div class="d-flex flex-column flex-md-row">
-                  <p class="lead">
-                    <span class="font-weight-bold">Register Your ERC Token for Cross Chain</span>
-                    <span class="d-block text-muted">Any ERC Token can be registered by its owner.</span>
-                    <span class="d-block text-muted">Please read the <a target="_blank" href="#0">registration guide</a>
-                      before register
-                      tokens for cross
-                      chain.</span>
-                  </p>
-                  <div class="ml-auto">
-                  </div>
-                </div>
-              </header><!-- /.page-title-bar -->
               <!-- .page-section -->
               <div class="page-section">
                 <!-- grid row -->
@@ -200,7 +197,7 @@
                       <form v-on:submit.prevent="crossTransfer">
 
                         <div class="card-body">
-                          <h3 class="card-title mb-4">Transfer ERC Token for Cross Chain</h3>
+                          <h3 class="card-title mb-4">Transfer Token</h3>
                         </div>
 
                         <div class="card-body border-top mb-2">
